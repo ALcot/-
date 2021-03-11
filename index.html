@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <p>今の<span style="color: palevioletred">モヤモヤ</span>吐き出そう！</p>
+    <title></title>
+
+    <!-- /* この中にcssをかけます */ -->
+    <!-- reset.cssが先 -->
+    <link rel="stylesheet" href="css/reset.css" />
+    <!-- style.cssが自分で記述するcss -->
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <!-- コンテンツ表示画面 -->
+    <h1>～素直になれる匿名の良い部分を活かしたい掲示板～</h1>
+    <div>
+      <div class="text">
+        <textarea id="message" rows="13" cols="70"></textarea><br /><br />
+
+        <button id="send">
+          <span class="button-simple pekopeko">送信</span>
+        </button>
+      </div>
+      <hr />
+      <div id="output"></div>
+    </div>
+    　　　　
+    <!-- コンテンツ表示画面 -->
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!--** 以下Firebase **-->
+    <!-- ここにfirebaseのscriptを貼り付ける -->
+    <script src="https://www.gstatic.com/firebasejs/7.14.2/firebase.js"></script>
+    <script>
+      // Firebaseの設定
+      var firebaseConfig = {
+        apiKey: "",
+        authDomain: "",
+        projectId: "",
+        storageBucket: "",
+        messagingSenderId: "",
+        appId: "",
+        databaseURL: "",
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+
+      let newPostRef = firebase.database().ref();
+      // ここから下にjqueryの処理
+
+      var database = firebase.database();
+      let room = "chat_room";
+      const send = document.getElementById("send");
+      // const name = document.getElementById("name");
+      const message = document.getElementById("message");
+      const output = document.getElementById("output");
+
+      // 送信処理
+      send.addEventListener("click", function () {
+        var now = new Date();
+        // データを登録で送る
+        database.ref(room).push({
+          //テキストエリア
+          message: message.value,
+          // 送信時間表示
+          date:
+            now.getFullYear() +
+            "年" +
+            now.getMonth() +
+            1 +
+            "月" +
+            now.getDate() +
+            "日" +
+            now.getHours() +
+            "時" +
+            now.getMinutes() +
+            "分",
+        });
+        // 文字を空にする
+        // $("#username").val(""); //ユーザー名を空にする   匿名でやりたいから入力出来ないように非表示
+        message.value = ""; //テキストを空にする
+      });
+
+      // 受信処理
+      database.ref(room).on("child_added", function (data) {
+        //ここに保存されたデータが全て入ってくる
+        // function (data)のdataにfirebaseのデータが入ってくる
+        const v = data.val();
+        const k = data.key;
+
+        //テンプレートリテラル `` を活用して変数にhtmlを埋め込もう！ ←←←←←←←←←出来ないから一通り終わったら試してみる！
+        let str = "";
+        str += '<div class="name">匿名係長' + "</div>";
+
+        str += '<div class="text">' + v.date + "</div>";
+
+        str += '<div class="text">' + v.message + "</div><hr>";
+
+        // ここでデータをhtmlに埋め込む appendには変数を埋め込もう！
+        output.innerHTML += str;
+      });
+
+      // エンターで入力決定は変換や改行で間違えて送信する人が多いと思うからその処理はしない！！
+    </script>
+  </body>
+</html>

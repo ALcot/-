@@ -1,0 +1,38 @@
+body {
+  background-color: rgb(138, 248, 197);
+}
+
+h1 {
+  color: coral;
+  text-align: center;
+  font-size: 30px;
+  margin-top: 50px;
+  margin-bottom: 70px;
+}
+p {
+  color: gray;
+  text-align: center;
+  font-size: 50px;
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
+
+div {
+  text-align: center;
+}
+
+textarea {
+  vertical-align: top;
+}
+
+#output {
+  background-color: skyblue;
+}
+
+#message {
+  size: 50em;
+}
+
+hr {
+  margin: 1em;
+}
